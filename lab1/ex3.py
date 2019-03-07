@@ -1,21 +1,34 @@
-import numpy as np
-
-
 def min_value(ar):
-    if ar.size == 0:
+    if len(ar) == 0:
         print("Given array is empty")
         quit()
     else:
         m = ar[0]
-        ind = 0
-        for i in range(ar.size):
+        for i in range(len(ar)):
             if ar[i] < m:
                 m = ar[i]
-                ind = i
+
+        ind = []
+        for i in range(len(ar)):
+            if ar[i] == m:
+                ind.append(i)
         return m, ind
-    # return np.min(ar), np.argmin(ar)
 
 
-a = np.array([3, 5, 2, 1, 9])
+try:
+    n = int(input("How many numbers? "))
+except ValueError:
+    print("You must enter an integer")
+    quit()
+
+a = []
+for i in range(n):
+    try:
+        num = float(input("Enter " + str(i + 1) + ". number: "))
+    except ValueError:
+        print("You must enter a number (remember to use . instead of ,)")
+        quit()
+    a.append(num)
+
 val, index = min_value(a)
-print("Minimum number is " + str(val) + ", located at index " + str(index))
+print("Minimum number is " + str(val) + ", located at index(es) " + str(index))
