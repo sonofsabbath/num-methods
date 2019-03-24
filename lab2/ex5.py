@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from cs50 import get_float
 
 n = get_float("Size: ")
-if n == 0:
+if n <= 0:
     print("Size must be higher than zero")
     quit()
 

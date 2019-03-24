@@ -10,12 +10,15 @@ if y == 0:
 divisible = "x is divisible by y" if x % y == 0 else "x is not divisible by y"
 print(divisible)
 
-prec = get_int("Decimals: ")  # ex4
-if prec < 0:
-    print("Number of decimals must be higher than zero")
-    quit()
+div = x / y
+if div == int(div):
+    print(int(div))
 else:
-    r = "{0:." + str(prec) + "f}"
-    div = r.format(x / y)
-
-print("x/y = " + div)
+    prec = get_int("Decimals: ")  # ex4
+    if prec < 0:
+        print("Number of decimals must be higher than zero")
+        quit()
+    else:
+        r = "{0:." + str(prec) + "f}"
+        div= r.format(x/y + 0)
+        print("x/y = " + div)
