@@ -4,8 +4,8 @@ import numpy as np
 
 def field(fig, x, y=1):
     if x <= 0 or y <= 0:
-        print("x and y both must be higher than zero")
-        quit()
+        print("x and y both must be higher than zero\nCan't calculate the field of " + fig)
+        return 0
 
     if fig == 'circle':
         f = np.pi * x ** 2
@@ -16,9 +16,10 @@ def field(fig, x, y=1):
     elif fig == 'rhombus':
         f = (x + y) / 2
     else:
-        print("Unrecognized figure")
-        quit()
+        print("Unrecognized figure\nCan't calculate the field of " + fig)
+        return 0
 
+    print("Field of " + fig + ": " + str(f))
     return f
 
 
@@ -30,12 +31,15 @@ def compare_figures(figs):
         else:
             vals.append(field(i[0], i[1], i[2]))
 
-    if vals[0] > vals[1]:
-        print(str(figs[0][0]) + " has larger field")
-    elif vals[0] < vals[1]:
-        print(str(figs[1][0]) + " has larger field")
+    if vals[0] == 0 or vals[1] == 0:
+        print("Can't compare - couldn't calculate one or both of the fields")
     else:
-        print("Figures are equal")
+        if vals[0] > vals[1]:
+            print(str(figs[0][0]) + " has larger field")
+        elif vals[0] < vals[1]:
+            print(str(figs[1][0]) + " has larger field")
+        else:
+            print("Figures are equal")
 
 
 figures = []
