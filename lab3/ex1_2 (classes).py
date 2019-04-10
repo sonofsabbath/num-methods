@@ -24,42 +24,50 @@ def count_fields(fig):
         except TypeError:
             print('Parameters must be numbers')
 
+    if field == int(field):
+        field = int(field)
+
     return field
 
 
 def compare_fields(figs):
-    if not figs:
-        print('At least one figure is needed')
+    if not figs or type(list()) != type(figs):
+        print('At least one figure (as list of lists) is needed')
         return -1
 
     fields = []
     for i in figs:
         print(i)
-        try:
-            f_name = i[0].lower()
-            i[0] = mapping[f_name]
+        if type(list()) != type(i):
+            print('Function takes figure data as list of lists')
+        else:
+            try:
+                f_name = i[0].lower()
+                i[0] = mapping[f_name]
 
-            f = count_fields(i)
-            fields.append(f)
-            if f != -1:
-                print(f)
-        except KeyError:
-            print('Unrecognized figure')
-            fields.append(-1)
-        except AttributeError:
-            print('Enter name of figure first')
-            fields.append(-1)
-        except IndexError:
-            print('Entered empty figure data')
-            fields.append(-1)
+                f = count_fields(i)
+                fields.append(f)
+                if f != -1:
+                    print('Field:', f)
+            except KeyError:
+                print('Unrecognized figure')
+                fields.append(-1)
+            except AttributeError:
+                print('Enter name of figure first (as a text)')
+                fields.append(-1)
+            except IndexError:
+                print('Entered empty figure data')
+                fields.append(-1)
 
     f_max = max(fields)
-    max_figs = []
-    for i in range(len(fields)):
-        if fields[i] == f_max and fields[i] != -1:
-            max_figs.append((figs[i][0].name, i))
-
-    print('Max field:', str(f_max), '\nFigure(s) and index(es):', max_figs)
+    if f_max != -1:
+        max_figs = []
+        for i in range(len(fields)):
+            if fields[i] == f_max:
+                max_figs.append((figs[i][0].name, i))
+        print('\nMax field:', str(f_max), '\nFigure(s) and index(es):', max_figs)
+    else:
+        print("\nCouldn't calculate any field")
 
 
 mapping = {}
@@ -68,4 +76,4 @@ rectangle = Figure('rectangle', 2, lambda x: x[0] * x[0])
 triangle = Figure('triangle', 2, lambda x: (x[0] * x[1]) / 2)
 rhombus = Figure('rhombus', 2, lambda x: (x[0] + x[1]) / 2)
 
-compare_fields([['rhombus', 9, 2.4], ['circle', 2.5], ['circle', 2.5], ['triangle', 'xd', 4]])
+compare_fields([['rectangle', 2, 3], ['circle', 1], ['triangle', 3]])
