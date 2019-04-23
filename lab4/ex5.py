@@ -1,6 +1,5 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
+from scipy.optimize import fmin
 
 
 def f(x):
@@ -11,6 +10,7 @@ def gradient_descent(x, alpha, eta, epochs):
     e = 0
     f_prev = 100
     f_val = 0
+    df = np.zeros(2)
 
     while e < epochs and np.abs(f_prev - f_val) >= eta:
         f_prev = f_val
@@ -28,31 +28,46 @@ def gradient_descent(x, alpha, eta, epochs):
 def global_optimum():
     xs = []
     vals = []
+    failures = 0
+    trials = 0
 
-    for i in range(-15, 6):
-        for j in range(-3, 4):
-            x12, value = gradient_descent([i, j], 0.0001, 0.0001, 10000)
+    for i in range(-11, 3):
+        for j in range(-1, 2):
+            x12, value = gradient_descent([i, j], 0.0001, 0.0001, 25000)
             if not np.isnan(value):
                 xs.append(x12)
                 vals.append(value)
+            else:
+                failures += 1
+            trials += 1
+
+            x12 = [i, j]
+            value = f(x12)
+            if not np.isnan(value):
+                xs.append(x12)
+                vals.append(value)
+            else:
+                failures += 1
+            trials += 1
 
     ind = int(np.argmin(vals))
-    return xs[ind], vals[ind]
+    rate = "{:.2f}%".format(((trials - failures) / trials) * 100)
+    return xs[ind], vals[ind], rate
 
 
-x1 = np.linspace(-15, 5, 50)
-x2 = np.linspace(-3, 3, 50)
-df = np.zeros(2)
-X, Y = np.meshgrid(x1, x2)
-res, val = global_optimum()
-print(res, val)
+res, val, rating = global_optimum()
+print('trying to find global minimum using my function')
+print('learning rate: 0.0001, precision: 0.0001, max_epochs: 25000')
+print('global optimum at', res, ', optimal value:', val)
+print('success / total trials rate (for local optimas):', rating, '\n')
 
-Z = np.zeros(X.shape)
-for i in range(Z.shape[0]):
-    for j in range(Z.shape[1]):
-        Z[i][j] = f([X[i, j], Y[i, j]])
+print('trying to find global minimum using scipy')
+x0 = np.random.randn(2)
+scimin = fmin(f, x0)
+scival = f(scimin)
 
-ax = Axes3D(plt.figure())
-ax.plot_surface(X, Y, Z)
-ax.plot([res[0]], [res[1]], [val], marker='o', markersize=5)
-plt.show()
+print('\ndifference between my function and scipy:', np.abs(val - scival))
+if val < scival:
+    print('my function found lower value')
+else:
+    print('scipy found lower value')
