@@ -7,10 +7,10 @@ env = gym.make('Taxi-v2')  # inicjacja środowiska
 Q = np.zeros((env.observation_space.n, env.action_space.n))  # inicjacja Q-Table
 
 train_epochs = 50000
-test_epochs = 10
+test_epochs = 3
 max_steps = 100
-l_rate = 0.7
-d_rate = 0.618
+l_rate = 0.6
+d_rate = 0.6
 ex_rate = 1.0
 max_ex_rate = 1.0
 min_ex_rate = 0.01
@@ -41,7 +41,7 @@ for i in range(train_epochs):
 for i in range(test_epochs):
     state = env.reset()
     finished = False
-    print('Epoch', i)
+    print('Ride', i+1)
 
     for step in range(max_steps):
         env.render()
@@ -54,5 +54,6 @@ for i in range(test_epochs):
 
         state = new_state
         sleep(0.5)
+    sleep(1)
 
 env.close()
